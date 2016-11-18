@@ -336,3 +336,6 @@ build/
 
 # virtualenv
 env/
+
+# config for django settings
+config.py
