@@ -1,0 +1,17 @@
+{% if projects|length > 0 %}
+    <table class="table table-bordered table-responsive table-striped table-hover">
+        <thead>
+            <th>Наименование проекта</th>
+            <th>Сумма баллов</th>
+        </thead>
+        <tbody>
+        {% load projects_sums %}
+        {% for name, sum in projects|projects_sums %}
+            <tr>
+                <td>{{ name }}</td>
+                <td class="col-xs-5">{{ sum }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
