@@ -339,3 +339,6 @@ env/
 
 # config for django settings
 config.py
+
+# sqlite
+*.sqlite*

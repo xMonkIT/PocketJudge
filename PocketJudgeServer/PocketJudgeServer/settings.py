@@ -58,8 +58,7 @@ ROOT_URLCONF = 'PocketJudgeServer.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,7 +79,11 @@ WSGI_APPLICATION = 'PocketJudgeServer.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'sqlserver_ado',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3'
+    },
+    'sqlserver': {
+        'ENGINE': 'sql_server.pyodbc',
         'HOST': config.db_host,
         'NAME': config.db_name,
         'USER': config.db_user,
