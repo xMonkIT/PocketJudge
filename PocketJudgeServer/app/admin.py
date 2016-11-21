@@ -1,3 +1,4 @@
 from django.contrib import admin
+from .models import Contestant, Judge, Contest, Competence, Project, Mark
 
-# Register your models here.
+admin.site.register((Contestant, Judge, Contest, Competence, Project, Mark))
