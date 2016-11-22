@@ -1,10 +1,7 @@
 from django.shortcuts import render
 from django.utils.datetime_safe import datetime
 
-from .models import *
-
-
-
+from .models import Contest
 
 
 def home(request):

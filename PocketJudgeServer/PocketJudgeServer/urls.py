@@ -17,8 +17,10 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 import app.urls as app_urls
+import rest_api.urls as api_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^api/', include(api_urls)),
     url(r'^', include(app_urls))
 ]
