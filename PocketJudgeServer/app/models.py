@@ -37,7 +37,7 @@ class Contest(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=1024, null=True, blank=True)
-    contest = models.ForeignKey(Contest)
+    contest = models.ForeignKey(Contest, related_name='projects')
     contestants = models.ManyToManyField(Contestant)
 
     def __str__(self):

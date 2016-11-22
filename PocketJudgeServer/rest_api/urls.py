@@ -10,6 +10,7 @@ router.register(r'contests', views.ContestViewSet)
 router.register(r'competences', views.CompetenceViewSet)
 router.register(r'projects', views.ProjectViewSet)
 router.register(r'marks', views.MarkViewSet)
+router.register(r'contest-depth', views.ContestDepthViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
