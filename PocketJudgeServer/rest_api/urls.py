@@ -3,6 +3,9 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'judges', views.JudgeViewSet)
+router.register(r'contestants', views.ContestantViewSet)
 router.register(r'contests', views.ContestViewSet)
 router.register(r'competences', views.CompetenceViewSet)
 router.register(r'projects', views.ProjectViewSet)
