@@ -3,7 +3,7 @@
     {% for contest in contests %}
         <li class="list-group-item">
             <p>{{ contest.name }}</p>
-            {% include 'app/projects-table.html' with projects=contest.project_set.all %}
+            {% include 'app/projects-table.html' with projects=contest.projects.all %}
             {% include 'app/contest.html' with contests=contest.contest_set.all %}
         </li>
     {% endfor %}
