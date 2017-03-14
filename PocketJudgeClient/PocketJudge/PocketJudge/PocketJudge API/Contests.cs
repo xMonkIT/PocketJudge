@@ -2,7 +2,7 @@
 // Changes may cause incorrect behavior and will be lost if the code is
 // regenerated.
 
-namespace App2
+namespace PocketJudge
 {
     using System;
     using System.Linq;
