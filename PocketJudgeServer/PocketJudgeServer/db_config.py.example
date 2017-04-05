@@ -1,0 +1,7 @@
+DB_CONFIG = {
+    'NAME': 'your db name',
+    'HOST': 'your host ip/name',
+    'USER': 'your username',
+    'PASSWORD': 'your password',
+    'PROVIDER': 'SQLNCLI11' # comment for use default
+}

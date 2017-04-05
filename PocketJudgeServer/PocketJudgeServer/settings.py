@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from .db_config import DB_CONFIG
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -79,9 +80,19 @@ WSGI_APPLICATION = 'PocketJudgeServer.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': 'db.sqlite3'
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3'
+        'NAME': DB_CONFIG.get('NAME'),
+        'ENGINE': 'sqlserver_ado',
+        'HOST': DB_CONFIG.get('HOST'),
+        'USER': DB_CONFIG.get('USER'),
+        'PASSWORD': DB_CONFIG.get('PASSWORD'),
+        'OPTIONS': {
+            'provider': DB_CONFIG.get('PROVIDER', 'SQLNCLI11')
+        }
     }
 }
 
