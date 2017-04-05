@@ -1,24 +1,23 @@
-from app.models import Contest, Competence, Project, Mark, Judge, Contestant, User
-from rest_framework import serializers, permissions
+from django.db import DatabaseError
+from rest_framework.exceptions import ValidationError
+
+from app.models import Contest, Competence, CompetenceType, Project, Mark, Judge, Contestant, User
+from rest_framework import serializers
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email')
 
 
 class JudgeSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer()
-
     class Meta:
         model = Judge
         fields = '__all__'
 
 
 class ContestantSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer()
-
     class Meta:
         model = Contestant
         fields = '__all__'
@@ -30,12 +29,28 @@ class ProjectOnlyUrlSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url',)
 
 
-class ContestSerializer(serializers.HyperlinkedModelSerializer):
-    projects = ProjectOnlyUrlSerializer(many=True)
-
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Contest
+        model = Project
         fields = '__all__'
+
+
+class ProjectModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('id_project', 'name', 'description', 'url')
+
+
+class CompetenceTypeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = CompetenceType
+        fields = '__all__'
+
+
+class CompetenceTypeModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompetenceType
+        fields = ('id', 'name', 'url')
 
 
 class CompetenceSerializer(serializers.HyperlinkedModelSerializer):
@@ -44,10 +59,12 @@ class CompetenceSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+class CompetenceModelSerializer(serializers.ModelSerializer):
+    competence_type = CompetenceTypeModelSerializer
+
     class Meta:
-        model = Project
-        fields = '__all__'
+        model = Competence
+        fields = ('id_competence', 'competence_type', 'max_score', 'url')
 
 
 class MarkSerializer(serializers.HyperlinkedModelSerializer):
@@ -56,17 +73,26 @@ class MarkSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
         extra_kwargs = {'judge': {'read_only': True}}
 
+    def create(self, validated_data):
+        user = validated_data.pop('user')
+        contest = Contest.objects.filter(projects=validated_data.get('project'))[0]
+        judges = Judge.objects.filter(user=user, contest=contest)
+        validated_data['judge'] = judges[0] if judges else None
 
-class CompetenceModelSerializer(serializers.ModelSerializer):
+        try:
+            mark = Mark.objects.create(**validated_data)
+        except DatabaseError as err:
+            raise ValidationError(err.__cause__.__context__.excepinfo[2])
+
+        return mark
+
+
+class ContestSerializer(serializers.HyperlinkedModelSerializer):
+    projects = ProjectOnlyUrlSerializer(many=True)
+
     class Meta:
-        model = Competence
-        fields = ('id', 'name', 'url')
-
-
-class ProjectModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Project
-        fields = ('id', 'name', 'description', 'url')
+        model = Contest
+        exclude = ('mark_availability_type',)
 
 
 class ContestDepthSerializer(serializers.ModelSerializer):
@@ -75,4 +101,4 @@ class ContestDepthSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contest
-        exclude = ('parent_contest', 'judges')
+        exclude = ('parent_contest', 'mark_availability_type')

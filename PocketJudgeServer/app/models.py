@@ -14,11 +14,11 @@ from django.contrib.auth.models import User
 class Competence(models.Model):
     id_competence = models.AutoField(db_column='IdCompetence', primary_key=True)
     max_score = models.IntegerField(db_column='MaxScore')
-    competence_type = models.ForeignKey('CompetenceType', models.DO_NOTHING, db_column='IdCompetenceType')
-    contest = models.ForeignKey('Contest', models.DO_NOTHING, db_column='IdContest')
+    competence_type = models.ForeignKey('CompetenceType', models.DO_NOTHING, db_column='IdCompetenceType', related_name='competences')
+    contest = models.ForeignKey('Contest', models.DO_NOTHING, db_column='IdContest', related_name='competences')
 
     def __str__(self):
-        return self.competence_type.name + " (" + str(self.max_score) + ")"
+        return str(self.contest) + ": " + self.competence_type.name + " (" + str(self.max_score) + ")"
 
     class Meta:
         db_table = 'Competence'
@@ -45,8 +45,8 @@ class Contest(models.Model):
     max_count_contestant_on_project = models.IntegerField(db_column='MaxCountContestantOnProject', blank=True, null=True)
     max_count_project_on_contestant = models.IntegerField(db_column='MaxCountProjectOnContestant', blank=True, null=True)
     contestant_judge = models.BooleanField(db_column='ContestantJudge')
-    parent_contest = models.ForeignKey('self', models.DO_NOTHING, db_column='IdParentContest', blank=True, null=True)
-    mark_availability_type = models.ForeignKey('MarkAvailabilityType', models.DO_NOTHING, db_column='IdMarkAvailabilityType')
+    parent_contest = models.ForeignKey('self', models.DO_NOTHING, db_column='IdParentContest', blank=True, null=True, related_name='contests')
+    mark_availability_type = models.ForeignKey('MarkAvailabilityType', models.DO_NOTHING, db_column='IdMarkAvailabilityType', related_name='contests')
 
     def __str__(self):
         return (str(self.parent_contest) + "/" if self.parent_contest else "") + self.name
@@ -57,8 +57,8 @@ class Contest(models.Model):
 
 class Contestant(models.Model):
     id_contestant = models.AutoField(db_column='IdContestant', primary_key=True)
-    user = models.ForeignKey(User, models.DO_NOTHING, db_column='IdUser')
-    project = models.ForeignKey('Project', models.DO_NOTHING, db_column='IdProject')
+    user = models.ForeignKey(User, models.DO_NOTHING, db_column='IdUser', related_name='contestants')
+    project = models.ForeignKey('Project', models.DO_NOTHING, db_column='IdProject', related_name='contestants')
 
     def __str__(self):
         return str(self.project) + ": " + str(self.user)
@@ -72,7 +72,7 @@ class Judge(models.Model):
     id_judge = models.AutoField(db_column='IdJudge', primary_key=True)
     datetime_session_end = models.DateTimeField(db_column='DatetimeSessionEnd', blank=True, null=True)
     contest = models.ForeignKey(Contest, models.DO_NOTHING, db_column='IdContest', related_name='judges')
-    user = models.ForeignKey(User, models.DO_NOTHING, db_column='IdUser')
+    user = models.ForeignKey(User, models.DO_NOTHING, db_column='IdUser', related_name='judges')
 
     def __str__(self):
         return str(self.contest) + ": " + str(self.user)
@@ -84,9 +84,9 @@ class Judge(models.Model):
 
 class Mark(models.Model):
     id_mark = models.AutoField(db_column='IdMark', primary_key=True)
-    competence = models.ForeignKey(Competence, models.DO_NOTHING, db_column='IdCompetence')
-    project = models.ForeignKey('Project', models.DO_NOTHING, db_column='IdProject')
-    judge = models.ForeignKey(Judge, models.DO_NOTHING, db_column='IdJudge')
+    competence = models.ForeignKey(Competence, models.DO_NOTHING, db_column='IdCompetence', related_name='marks')
+    project = models.ForeignKey('Project', models.DO_NOTHING, db_column='IdProject', related_name='marks')
+    judge = models.ForeignKey(Judge, models.DO_NOTHING, db_column='IdJudge', related_name='marks')
     score = models.IntegerField(db_column='Score')
 
     def __str__(self):
