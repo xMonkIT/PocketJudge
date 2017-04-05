@@ -12,24 +12,24 @@ namespace PocketJudge.ViewModels
 {
 	public class ItemsViewModel : BaseViewModel
 	{
-		public ObservableRangeCollection<Item> Items { get; set; }
+		public ObservableRangeCollection<dynamic> Items { get; set; }
 		public Command LoadItemsCommand { get; set; }
 
 		public ItemsViewModel()
 		{
 			Title = "Browse";
-			Items = new ObservableRangeCollection<Item>();
-			LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+			Items = new ObservableRangeCollection<dynamic>();
+			LoadItemsCommand = new Command(() => ExecuteLoadItemsCommand());
 
-			MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
+			MessagingCenter.Subscribe<NewItemPage, dynamic>(this, "AddItem", (obj, item) =>
 			{
-				var _item = item as Item;
-				Items.Add(_item);
-				await DataStore.AddItemAsync(_item);
+				//var _item = item as Item;
+				//Items.Add(item);
+				//await DataStore.AddItemAsync(_item);
 			});
 		}
 
-		async Task ExecuteLoadItemsCommand()
+		void ExecuteLoadItemsCommand()
 		{
 			if (IsBusy)
 				return;
@@ -39,18 +39,12 @@ namespace PocketJudge.ViewModels
 			try
 			{
 				Items.Clear();
-				var items = await DataStore.GetItemsAsync(true);
-				Items.ReplaceRange(items);
+				//var items = await DataStore.GetItemsAsync(true);
+				Items.ReplaceRange(new[] { new { Title = "asd" } });
 			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex);
-				MessagingCenter.Send(new MessagingCenterAlert
-				{
-					Title = "Error",
-					Message = "Unable to load items.",
-					Cancel = "OK"
-				}, "message");
 			}
 			finally
 			{

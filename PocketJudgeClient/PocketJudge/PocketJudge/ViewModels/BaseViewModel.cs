@@ -1,17 +1,21 @@
-﻿using PocketJudge.Helpers;
+﻿using Microsoft.Rest;
+using PocketJudge.Helpers;
 using PocketJudge.Models;
-using PocketJudge.Services;
-
+using System;
 using Xamarin.Forms;
 
 namespace PocketJudge.ViewModels
 {
 	public class BaseViewModel : ObservableObject
 	{
-		/// <summary>
-		/// Get the azure service instance
-		/// </summary>
-		public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+        public PocketJudgeAPI APIClient = new PocketJudgeAPI(
+            new Uri(""),
+            new BasicAuthenticationCredentials
+            {
+                UserName = "krochev",
+                Password = "Password123"
+            }
+        );
 
 		bool isBusy = false;
 		public bool IsBusy

@@ -8,13 +8,13 @@ namespace PocketJudge.Views
 {
 	public partial class NewItemPage : ContentPage
 	{
-		public Item Item { get; set; }
+		public dynamic Item { get; set; }
 
 		public NewItemPage()
 		{
 			InitializeComponent();
 
-			Item = new Item
+			Item = new 
 			{
 				Text = "Item name",
 				Description = "This is a nice description"
@@ -25,7 +25,7 @@ namespace PocketJudge.Views
 
 		async void Save_Clicked(object sender, EventArgs e)
 		{
-			MessagingCenter.Send(this, "AddItem", Item);
+			//MessagingCenter.Send(this, "AddItem", Item);
 			await Navigation.PopToRootAsync();
 		}
 	}
