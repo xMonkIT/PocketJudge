@@ -1,5 +1,9 @@
 {% extends 'app/base.html' %}
 
 {% block content %}
-{% include 'app/contest.html' %}
+    {% if contests|length > 0 %}
+        {% include 'app/contest.html' %}
+    {% else %}
+        <p>Отсутствует информация о мероприятиях</p>
+    {% endif %}
 {% endblock %}
