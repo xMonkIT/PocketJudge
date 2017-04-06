@@ -24,10 +24,10 @@ class JudgeSerializer(serializers.HyperlinkedModelSerializer):
 #         fields = '__all__'
 
 
-class ProjectOnlyUrlSerializer(serializers.HyperlinkedModelSerializer):
+class ProjectShortSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Project
-        fields = ('url',)
+        fields = ('url', 'name')
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
@@ -89,8 +89,6 @@ class MarkSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ContestSerializer(serializers.HyperlinkedModelSerializer):
-    projects = ProjectOnlyUrlSerializer(many=True)
-
     class Meta:
         model = Contest
         exclude = ('mark_availability_type',)
@@ -98,7 +96,7 @@ class ContestSerializer(serializers.HyperlinkedModelSerializer):
 
 class ContestDepthSerializer(serializers.ModelSerializer):
     competences = CompetenceModelSerializer(many=True)
-    projects = ProjectModelSerializer(many=True)
+    projects = ProjectShortSerializer(many=True)
 
     class Meta:
         model = Contest
