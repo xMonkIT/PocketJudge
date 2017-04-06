@@ -54,18 +54,18 @@ class Contest(models.Model):
     class Meta:
         db_table = 'Contest'
 
-
-class Contestant(models.Model):
-    id_contestant = models.AutoField(db_column='IdContestant', primary_key=True)
-    user = models.ForeignKey(User, models.DO_NOTHING, db_column='IdUser', related_name='contestants')
-    project = models.ForeignKey('Project', models.DO_NOTHING, db_column='IdProject', related_name='contestants')
-
-    def __str__(self):
-        return str(self.project) + ": " + str(self.user)
-
-    class Meta:
-        db_table = 'Contestant'
-        unique_together = (('user', 'project'),)
+#
+# class Contestant(models.Model):
+#     id_contestant = models.AutoField(db_column='IdContestant', primary_key=True)
+#     user = models.ForeignKey(User, models.DO_NOTHING, db_column='IdUser', related_name='contestants')
+#     project = models.ForeignKey('Project', models.DO_NOTHING, db_column='IdProject', related_name='contestants')
+#
+#     def __str__(self):
+#         return str(self.project) + ": " + str(self.user)
+#
+#     class Meta:
+#         db_table = 'Contestant'
+#         unique_together = (('user', 'project'),)
 
 
 class Judge(models.Model):
@@ -113,6 +113,7 @@ class Project(models.Model):
     name = models.CharField(db_column='Name', max_length=255)
     description = models.CharField(db_column='Description', max_length=1024, blank=True, null=True)
     contest = models.ForeignKey(Contest, models.DO_NOTHING, db_column='IdContest', related_name='projects')
+    contestants = models.ManyToManyField(User, related_name='projects')
 
     def __str__(self):
         return self.name

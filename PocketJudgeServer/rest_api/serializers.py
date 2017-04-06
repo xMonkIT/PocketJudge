@@ -1,7 +1,8 @@
 from django.db import DatabaseError
 from rest_framework.exceptions import ValidationError
 
-from app.models import Contest, Competence, CompetenceType, Project, Mark, Judge, Contestant, User
+from app.models import Contest, Competence, CompetenceType, Project, Mark, Judge, User
+# from app.models import Contest, Competence, CompetenceType, Project, Mark, Judge, Contestant, User
 from rest_framework import serializers
 
 
@@ -17,10 +18,10 @@ class JudgeSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class ContestantSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Contestant
-        fields = '__all__'
+# class ContestantSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Contestant
+#         fields = '__all__'
 
 
 class ProjectOnlyUrlSerializer(serializers.HyperlinkedModelSerializer):

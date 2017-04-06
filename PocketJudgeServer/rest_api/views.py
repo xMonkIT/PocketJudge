@@ -1,7 +1,10 @@
 from rest_framework import viewsets, permissions
-from app.models import Contest, Competence, CompetenceType, Project, Mark, Judge, Contestant, User
+# from app.models import Contest, Competence, CompetenceType, Project, Mark, Judge, Contestant, User
+# from .serializers import ContestSerializer, CompetenceSerializer, CompetenceTypeSerializer, ProjectSerializer, \
+#     MarkSerializer, JudgeSerializer, ContestantSerializer, UserSerializer, ContestDepthSerializer
+from app.models import Contest, Competence, CompetenceType, Project, Mark, Judge, User
 from .serializers import ContestSerializer, CompetenceSerializer, CompetenceTypeSerializer, ProjectSerializer, \
-    MarkSerializer, JudgeSerializer, ContestantSerializer, UserSerializer, ContestDepthSerializer
+    MarkSerializer, JudgeSerializer, UserSerializer, ContestDepthSerializer
 
 
 class MarkPermissions(permissions.BasePermission):
@@ -19,7 +22,7 @@ class MarkPermissions(permissions.BasePermission):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    filter_fields = ('judges__contest', 'contestants__project', 'contestants__project__contest')
+    filter_fields = ('judges__contest', 'projects', 'projects__contest')
 
 
 class JudgeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -28,16 +31,16 @@ class JudgeViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = '__all__'
 
 
-class ContestantViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = ContestantSerializer
-    queryset = Contestant.objects.all()
-    filter_fields = '__all__'
+# class ContestantViewSet(viewsets.ReadOnlyModelViewSet):
+#     serializer_class = ContestantSerializer
+#     queryset = Contestant.objects.all()
+#     filter_fields = '__all__'
 
 
 class ContestViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContestSerializer
     queryset = Contest.objects.all()
-    filter_fields = ('judges__user', 'projects__contestants__user')
+    filter_fields = ('judges__user', 'projects__contestants')
 
 
 class CompetenceTypeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -55,7 +58,7 @@ class CompetenceViewSet(viewsets.ReadOnlyModelViewSet):
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
-    filter_fields = ('contest', 'contest__judges__user', 'contestants__user')
+    filter_fields = ('contest', 'contest__judges__user', 'contestants')
 
 
 class MarkViewSet(viewsets.ModelViewSet):
@@ -71,4 +74,4 @@ class MarkViewSet(viewsets.ModelViewSet):
 class ContestDepthViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContestDepthSerializer
     queryset = Contest.objects.all()
-    filter_fields = ('judges__user', 'projects__contestants__user')
+    filter_fields = ('judges__user', 'projects__contestants')
