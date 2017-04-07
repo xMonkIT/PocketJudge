@@ -7,6 +7,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from __future__ import unicode_literals
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -117,6 +118,18 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        if self.contest.max_count_contestant_on_project \
+                and self.contestants.count() > self.contest.max_count_contestant_on_project:
+            raise ValidationError("Количество участников на проект не может превышать указанное в настройках")
+        if self.contest.max_count_project_on_contestant:
+            for contestant in self.contestants.all():
+                if Project.objects.filter(contestants=contestant, contest=self.contest).count() \
+                        > self.contest.max_count_project_on_contestant:
+                    raise ValidationError("Количество проектов на участника не может превышать указанное в настройках")
+        if not self.contest.contestant_judge and self.contest.judges.filter(user__in=self.contestants.all()):
+            raise ValidationError("Судья мероприятия не может быть участником")
 
     class Meta:
         db_table = 'Project'

@@ -3,7 +3,7 @@ from rest_framework import viewsets, permissions
 # from .serializers import ContestSerializer, CompetenceSerializer, CompetenceTypeSerializer, ProjectSerializer, \
 #     MarkSerializer, JudgeSerializer, ContestantSerializer, UserSerializer, ContestDepthSerializer
 from app.models import Contest, Competence, CompetenceType, Project, Mark, Judge, User
-from .serializers import ContestSerializer, CompetenceSerializer, CompetenceTypeSerializer, ProjectSerializer, \
+from .serializers import ContestShortSerializer, CompetenceSerializer, CompetenceTypeSerializer, ProjectSerializer, \
     MarkSerializer, JudgeSerializer, UserSerializer, ContestDepthSerializer
 
 
@@ -38,7 +38,7 @@ class JudgeViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ContestViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = ContestSerializer
+    serializer_class = ContestShortSerializer
     queryset = Contest.objects.all()
     filter_fields = ('judges__user', 'projects__contestants')
 

@@ -51,7 +51,7 @@ class CompetenceTypeSerializer(serializers.HyperlinkedModelSerializer):
 class CompetenceTypeModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompetenceType
-        fields = ('id', 'name', 'url')
+        fields = ('name',)
 
 
 class CompetenceSerializer(serializers.HyperlinkedModelSerializer):
@@ -65,7 +65,7 @@ class CompetenceModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Competence
-        fields = ('id_competence', 'competence_type', 'max_score', 'url')
+        fields = ('id_competence', 'url', 'competence_type', 'max_score')
 
 
 class MarkSerializer(serializers.HyperlinkedModelSerializer):
@@ -88,10 +88,10 @@ class MarkSerializer(serializers.HyperlinkedModelSerializer):
         return mark
 
 
-class ContestSerializer(serializers.HyperlinkedModelSerializer):
+class ContestShortSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Contest
-        exclude = ('mark_availability_type',)
+        fields = ('url', 'name')
 
 
 class ContestDepthSerializer(serializers.ModelSerializer):
@@ -100,4 +100,10 @@ class ContestDepthSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contest
-        exclude = ('parent_contest', 'mark_availability_type')
+        fields = ('name', 'description', 'datetime_begin', 'datetime_end', 'competences', 'projects')
+
+# serializers.py
+
+#views.py
+
+# urls.py

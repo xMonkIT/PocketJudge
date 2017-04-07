@@ -1,11 +1,11 @@
 {% if contests|length > 0 %}
-    <ul class="list-group">
-    {% for contest in contests %}
-        <li class="list-group-item">
-            <p>{{ contest.name }}</p>
-            {% include 'app/projects-table.html' with projects=contest.projects.all %}
-            {% include 'app/contest.html' with contests=contest.contests.all %}
-        </li>
-    {% endfor %}
-    </ul>
+<ul class="list-group">
+{% for contest in contests %}
+    <li class="list-group-item">
+        <p>{{ contest.name }}</p>
+        {% include 'app/projects-table.html' with projects=contest.projects.all %}
+        {% include 'app/contest.html' with contests=contest.contests.all %}
+    </li>
+{% endfor %}
+</ul>
 {% endif %}
