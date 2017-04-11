@@ -8,8 +8,7 @@
         <section id="loginForm">
             <form action="." method="post" class="form-horizontal">
                 {% csrf_token %}
-                {{ form }}
-                <hr>
+                {{ form.as_p }}
                 <input type="hidden" name="next" value="/" />
                 <input type="submit" value="Log in" class="btn btn-default" />
             </form>

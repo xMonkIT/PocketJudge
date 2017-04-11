@@ -1,0 +1,14 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <h2>{{ contest }}</h2>
+    <ul class="list-group">
+        {% for project in contest.projects.all %}
+            <li class="list-group-item">
+                <a href="{% url 'app:my_project_detail' project.pk %}">{{ project }}</a>
+            </li>
+        {% empty %}
+            <p>В мероприятии не участвует ни одного проекта.</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

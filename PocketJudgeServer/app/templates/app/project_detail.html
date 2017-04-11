@@ -1,0 +1,17 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <h2>{{ project.name }}</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <form action="." method="post" class="form-horizontal">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+                <a href="{% url 'app:my_contest_detail' project.contest.pk %}">
+                    <input type="button" value="Отмена" class="btn btn-default" />
+                </a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
