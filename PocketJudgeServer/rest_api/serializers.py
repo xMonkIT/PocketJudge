@@ -101,9 +101,3 @@ class ContestDepthSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contest
         fields = ('name', 'description', 'datetime_begin', 'datetime_end', 'competences', 'projects')
-
-# serializers.py
-
-#views.py
-
-# urls.py
